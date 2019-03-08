@@ -1,5 +1,6 @@
 FROM ubuntu:14.04
 MAINTAINER Abdul "abdul@example.com"
+ENV REFRESHED_AT 2019-03-08
 RUN apt-get update
 RUN apt-get install -y nginx
 RUN mkdir -p /var/www/html
