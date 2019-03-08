@@ -4,6 +4,6 @@ ENV REFRESHED_AT 2019-03-08
 RUN apt-get update
 RUN apt-get install -y nginx
 RUN mkdir -p /var/www/html
-ADD global.conf /etc/nginx/conf.d/global.conf
-ADD nginx.conf /etc/nginx/nginx.conf
+ADD https://github.com/abdulhafis786/Dockerfiles/blob/master/global.conf /etc/nginx/conf.d/global.conf
+ADD https://github.com/abdulhafis786/Dockerfiles/blob/master/nginx.conf /etc/nginx/nginx.conf
 EXPOSE 80
