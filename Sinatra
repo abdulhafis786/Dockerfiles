@@ -1,6 +1,7 @@
 FROM ubuntu:14.04
 MAINTAINER Abdul "abdul@example.com"
 ENV REFRESHED_AT 2019-03-12
+RUN apt-get update
 
 #Need The below package before adding the repositroy
 RUN apt-get install software-properties-common -y
