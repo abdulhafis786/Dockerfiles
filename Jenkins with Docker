@@ -1,0 +1,41 @@
+FROM ubuntu:14.04
+MAINTAINER Abdul@aexample.com
+
+#Environment refresh status
+ENV REFRESHED_AT 2019-03-20
+
+#updating the package manager
+RUN apt-get update -qq && apt-get install -qqy curl
+
+#Installing the GPG keys and updating the source list
+RUN curl https://download.docker.com/linux/ubuntu/gpg  | apt-key add -
+RUN echo deb https://get.docker.com/ubuntu docker main > /etc/apt/sources.list.d/docker.list
+
+#Installing the required software
+RUN apt-get install -y apt-transport-https && apt-get update -qq && apt-get install --force-yes -y iptables ca-certificates lxc openjdk-6-jdk git-core lxc-docker
+
+#Setting the Jenkins home and adding the Mirror
+ENV JENKINS_HOME /opt/jenkins/data
+ENV JENKINS_MIRROR http://mirrors.jenkins-ci.org
+
+#Creating a plugin directory for jenkins
+RUN mkdir -p $JENKINS_HOME/plugins
+
+#Obtaining the war file of Jenkins from the mirror location
+RUN curl -sf -o /opt/jenkins/jenkins.war -L $JENKINS_MIRROR/war-stable/latest/jenkins.war
+
+#Adding the required plugins into th directory
+RUN for plugin in chucknorris greenballs scm-api git-client git ws-cleanup ;\
+do curl -sf -o $JENKINS_HOME/plugins/${plugin}.hpi \
+-L $JENKINS_MIRROR/plugins/${plugin}/latest/${plugin}.hpi ; done
+
+#Adding the local Jenkins.sh(Script available in the same docker file location)
+ADD ./dockerjenkins.sh /usr/local/bin/dockerjenkins.sh
+
+#Providing executive permission
+RUN chmod +x /usr/local/bin/dockerjenkins.sh
+
+#Setting up the volume, Exposing and setting the entry point for the container
+VOLUME /var/lib/docker
+EXPOSE 8080
+ENTRYPOINT [ "/usr/local/bin/dockerjenkins.sh" ]
