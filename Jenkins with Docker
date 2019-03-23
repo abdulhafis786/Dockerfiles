@@ -12,7 +12,15 @@ RUN curl https://download.docker.com/linux/ubuntu/gpg  | apt-key add -
 RUN echo deb https://get.docker.com/ubuntu docker main > /etc/apt/sources.list.d/docker.list
 
 #Installing the required software
-RUN apt-get install -y apt-transport-https && apt-get update -qq && apt-get install --force-yes -y iptables ca-certificates lxc openjdk-6-jdk git-core lxc-docker
+RUN apt-get install -y --fix-missing apt-transport-https && apt-get update -qq && apt-get install --force-yes -y iptables ca-certificates lxc git-core lxc-docker
+
+#Jenkins needs java 8 which is not available in ubuntu. os installing them.
+RUN apt-get install software-properties-common -y  && add-apt-repository ppa:webupd8team/java -y && apt-get update
+
+#Accepting the oracle licence agreement and installing the oracle 8
+RUN echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
+RUN echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
+RUN apt-get install oracle-java8-installer -qqy
 
 #Setting the Jenkins home and adding the Mirror
 ENV JENKINS_HOME /opt/jenkins/data
