@@ -15,6 +15,8 @@ RUN useradd jboss && groupadd test && usermod -g test jboss
 
 #Adding the file to the work directory
 #Zipping the tar file directly had issues so had to use copy command
+#wget http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.tar.gz
+#wget http://repo1.maven.org/maven2/org/jboss/modules/jboss-modules/1.1.5.GA/jboss-modules-1.1.5.GA.jar
 #New jboss-module jar has to replaced cos the one present in the jboss-as-7.1.1.Final will not work
 COPY jboss-as-7.1.1.Final/ /usr/local/share/jboss/
 COPY jboss-modules.jar /usr/local/share/jboss/
